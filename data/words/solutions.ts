@@ -1,0 +1,14 @@
+export const SOLUTIONS: readonly string[] = [
+  'PIÑAS', 'CASAS', 'NIEVE', 'MUNDO', 'LIBRO', 'FUEGO', 'PLAYA', 'CALLE',
+  'NOCHE', 'VERDE', 'TIGRE', 'PUNTO', 'CAMPO', 'TORRE', 'DULCE', 'RAYOS',
+  'PIANO', 'RADIO', 'LUNES', 'MARZO', 'ABRIL', 'MAYOR', 'MENOR', 'VIAJE',
+  'FALDA', 'BOLSO', 'GATOS', 'PERRO', 'RATON', 'LOBOS', 'AGUAS', 'ARBOL',
+  'NUBES', 'LUCES', 'MESAS', 'SILLA', 'PARED', 'TECHO', 'PISOS', 'LLAVE',
+  'RELOJ', 'CARTA', 'SOBRE', 'FIRMA', 'NOTAS', 'TEXTO', 'LINEA', 'PALCO',
+  'RITMO', 'BAILE', 'CANTO', 'VOCES', 'LETRA', 'LIBRE', 'JUSTO', 'FALSO',
+  'CLARO', 'DEBIL', 'LENTO', 'NUEVO', 'VIEJO', 'JOVEN', 'NIETO', 'PADRE',
+  'MADRE', 'HIJOS', 'PRIMO', 'NOVIO', 'AMIGO', 'DUEÑO', 'SUEÑO', 'LEÑOS',
+  'MOÑOS', 'PUÑOS', 'BAÑOS', 'NIÑOS', 'GRUPO', 'AGUJA', 'BOTAS', 'GORRA',
+  'CINTA', 'TELAS', 'HILOS', 'CLAVO', 'TORNO', 'MOTOR', 'RUEDA', 'FRENO',
+  'BARCO', 'AVION',
+];
