@@ -19,6 +19,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect --
+       One-time read of an external source (localStorage/matchMedia) on
+       mount to hydrate client-only state — the standard SSR-safe pattern
+       (spec §11), not the repeated-setState-causing-cascading-renders
+       case this lint rule targets. */
     const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
     if (stored === 'light' || stored === 'dark') {
       setTheme(stored);
@@ -27,6 +32,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       setTheme(prefersDark ? 'dark' : 'light');
     }
     setHydrated(true);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
   useEffect(() => {
