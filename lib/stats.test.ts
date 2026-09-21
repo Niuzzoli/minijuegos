@@ -1,6 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import { calculateStats } from './stats';
 import type { ProgressStore } from '../types/daily-progress';
+import type { WordleAttempt } from '../types/wordle';
+
+function fakeAttempts(count: number): WordleAttempt[] {
+  return Array.from({ length: count }, () => ({
+    guess: 'XXXXX',
+    result: ['absent', 'absent', 'absent', 'absent', 'absent'],
+  }));
+}
 
 describe('calculateStats', () => {
   it('returns all zeros for an empty store', () => {
@@ -16,10 +24,10 @@ describe('calculateStats', () => {
 
   it('computes played/won/winPercentage and the attempts distribution from mixed history', () => {
     const store: ProgressStore = {
-      '2026-09-18': { game: 'wordle', status: 'won', attempts: [{}, {}, {}] as any, completedAt: 'x' },
-      '2026-09-19': { game: 'wordle', status: 'lost', attempts: [{}, {}, {}, {}, {}, {}] as any, completedAt: 'x' },
-      '2026-09-20': { game: 'wordle', status: 'won', attempts: [{}, {}, {}] as any, completedAt: 'x' },
-      '2026-09-21': { game: 'wordle', status: 'in-progress', attempts: [{}] as any },
+      '2026-09-18': { game: 'wordle', status: 'won', attempts: fakeAttempts(3), completedAt: 'x' },
+      '2026-09-19': { game: 'wordle', status: 'lost', attempts: fakeAttempts(6), completedAt: 'x' },
+      '2026-09-20': { game: 'wordle', status: 'won', attempts: fakeAttempts(3), completedAt: 'x' },
+      '2026-09-21': { game: 'wordle', status: 'in-progress', attempts: fakeAttempts(1) },
     };
 
     const stats = calculateStats(store, '2026-09-20');

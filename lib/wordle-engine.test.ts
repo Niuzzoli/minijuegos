@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { evaluateGuess, isWordValid, mergeLetterStates, WORD_LENGTH, MAX_ATTEMPTS } from './wordle-engine';
+import type { WordleAttempt } from '../types/wordle';
 
 describe('constants', () => {
   it('WORD_LENGTH is 5 and MAX_ATTEMPTS is 6', () => {
@@ -59,13 +60,13 @@ describe('isWordValid', () => {
 
 describe('mergeLetterStates', () => {
   it('returns the best known state per letter across attempts', () => {
-    const attempts = [
+    const attempts: WordleAttempt[] = [
       // index 2 ('S') is 'present' here — the plan's original fixture had
       // it 'absent' at both S positions, contradicting the assertion below.
-      { guess: 'CASAS', result: ['absent', 'present', 'present', 'present', 'absent'] as const },
-      { guess: 'CAMPO', result: ['correct', 'correct', 'absent', 'absent', 'absent'] as const },
+      { guess: 'CASAS', result: ['absent', 'present', 'present', 'present', 'absent'] },
+      { guess: 'CAMPO', result: ['correct', 'correct', 'absent', 'absent', 'absent'] },
     ];
-    const merged = mergeLetterStates(attempts as any);
+    const merged = mergeLetterStates(attempts);
     expect(merged.C).toBe('correct');
     expect(merged.A).toBe('correct');
     expect(merged.S).toBe('present');
