@@ -1,11 +1,7 @@
 import Link from 'next/link';
 import type { GameMeta } from '../data/games';
 
-const PLAY_ROUTES: Record<string, string> = {
-  wordle: '/jugar/wordle',
-};
-
-export function GameCard({ id, name, description, available }: GameMeta) {
+export function GameCard({ name, description, available, route }: GameMeta) {
   const content = (
     <div
       className={`rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 ${
@@ -25,8 +21,15 @@ export function GameCard({ id, name, description, available }: GameMeta) {
   );
 
   if (!available) {
-    return <div aria-disabled="true">{content}</div>;
+    // A real disabled, focusable-by-default control — unlike a plain
+    // `<div aria-disabled>`, `disabled` on a native <button> is reliably
+    // announced by assistive tech across browsers.
+    return (
+      <button type="button" disabled className="w-full cursor-not-allowed text-left">
+        {content}
+      </button>
+    );
   }
 
-  return <Link href={PLAY_ROUTES[id] ?? '/'}>{content}</Link>;
+  return <Link href={route ?? '/'}>{content}</Link>;
 }

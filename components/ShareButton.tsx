@@ -35,6 +35,7 @@ export function ShareButton({
   attemptGrid?: string[][];
 }) {
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
 
   const handleShare = async () => {
     const text = buildShareText(result, dateLabel, attemptGrid);
@@ -43,14 +44,26 @@ export function ShareButton({
       try {
         await navigator.share({ text });
         return;
-      } catch {
-        // user cancelled the native share sheet — fall through to clipboard
+      } catch (err) {
+        // AbortError = user cancelled the native share sheet, the expected
+        // path to fall through to clipboard. Any other rejection is a real
+        // share failure — still fall back to clipboard, but log it instead
+        // of silently treating it as a cancel.
+        if (!(err instanceof DOMException && err.name === 'AbortError')) {
+          console.error('navigator.share failed', err);
+        }
       }
     }
 
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('clipboard write failed', err);
+      setCopyFailed(true);
+      setTimeout(() => setCopyFailed(false), 2000);
+    }
   };
 
   return (
@@ -65,7 +78,7 @@ export function ShareButton({
         COMPARTIR
       </button>
       <p aria-live="polite" className="mt-1 h-4 text-xs text-[var(--color-text-muted)]">
-        {copied ? '¡Copiado!' : ''}
+        {copied ? '¡Copiado!' : copyFailed ? 'No se pudo copiar' : ''}
       </p>
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTodayKey } from '../../../hooks/useTodayKey';
 import { useDailyProgress } from '../../../hooks/useDailyProgress';
 import { getDailyPuzzle } from '../../../lib/daily-puzzle';
@@ -41,38 +41,41 @@ export default function WordlePage() {
     setCurrentGuess('');
   }, [todayKey]);
 
-  const handleKey = (key: string) => {
-    if (isFinished) return;
+  const handleKey = useCallback(
+    (key: string) => {
+      if (isFinished) return;
 
-    if (key === 'BACKSPACE') {
-      setCurrentGuess((g) => g.slice(0, -1));
-      return;
-    }
-
-    if (key === 'ENTER') {
-      if (currentGuess.length !== WORD_LENGTH) return;
-      if (!isWordValid(currentGuess, VALID_GUESSES)) {
-        setInvalidShake(true);
-        setTimeout(() => setInvalidShake(false), 400);
+      if (key === 'BACKSPACE') {
+        setCurrentGuess((g) => g.slice(0, -1));
         return;
       }
 
-      const result = evaluateGuess(currentGuess, puzzle.solution);
-      recordAttempt(todayKey, { guess: currentGuess.toUpperCase(), result });
-      setCurrentGuess('');
+      if (key === 'ENTER') {
+        if (currentGuess.length !== WORD_LENGTH) return;
+        if (!isWordValid(currentGuess, VALID_GUESSES)) {
+          setInvalidShake(true);
+          setTimeout(() => setInvalidShake(false), 400);
+          return;
+        }
 
-      const won = currentGuess.toUpperCase() === puzzle.solution;
-      const attemptsUsed = attempts.length + 1;
-      if (won || attemptsUsed >= MAX_ATTEMPTS) {
-        finishGame(todayKey, won ? 'won' : 'lost');
+        const result = evaluateGuess(currentGuess, puzzle.solution);
+        recordAttempt(todayKey, { guess: currentGuess.toUpperCase(), result });
+        setCurrentGuess('');
+
+        const won = currentGuess.toUpperCase() === puzzle.solution;
+        const attemptsUsed = attempts.length + 1;
+        if (won || attemptsUsed >= MAX_ATTEMPTS) {
+          finishGame(todayKey, won ? 'won' : 'lost');
+        }
+        return;
       }
-      return;
-    }
 
-    if (currentGuess.length < WORD_LENGTH) {
-      setCurrentGuess((g) => g + key);
-    }
-  };
+      if (currentGuess.length < WORD_LENGTH) {
+        setCurrentGuess((g) => g + key);
+      }
+    },
+    [isFinished, currentGuess, puzzle.solution, attempts.length, recordAttempt, finishGame, todayKey],
+  );
 
   const letterStates = mergeLetterStates(attempts);
 

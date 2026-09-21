@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { calculateStats } from '../../lib/stats';
 import { loadProgressStore } from '../../lib/storage';
-import { getTodayKey } from '../../lib/date';
+import { useTodayKey } from '../../hooks/useTodayKey';
 import { StatsPanel } from '../../components/StatsPanel';
 import type { UserStats } from '../../types/user-stats';
 
@@ -17,15 +17,17 @@ const EMPTY_STATS: UserStats = {
 };
 
 export default function StatsPage() {
+  const { todayKey } = useTodayKey();
   const [stats, setStats] = useState<UserStats>(EMPTY_STATS);
 
   useEffect(() => {
-    // One-time read of localStorage on mount — same SSR-safe hydration
-    // pattern as ThemeProvider/useDailyProgress (spec §11).
+    // Read of localStorage on mount and whenever todayKey changes (day
+    // rollover, or ?debugDate override per useTodayKey/spec §6) — same
+    // SSR-safe hydration pattern as ThemeProvider/useDailyProgress (spec §11).
     const store = loadProgressStore();
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setStats(calculateStats(store, getTodayKey()));
-  }, []);
+    setStats(calculateStats(store, todayKey));
+  }, [todayKey]);
 
   return (
     <div>

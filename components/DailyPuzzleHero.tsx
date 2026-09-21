@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { DailyPuzzle } from '../types/daily-puzzle';
+import { GAMES } from '../data/games';
 import { StreakDisplay } from './StreakDisplay';
 
 const GAME_LABELS: Record<DailyPuzzle['game'], { name: string; description: string }> = {
@@ -22,6 +23,7 @@ export function DailyPuzzleHero({
   alreadyPlayed: boolean;
 }) {
   const label = GAME_LABELS[puzzle.game];
+  const route = GAMES.find((game) => game.id === puzzle.game)?.route ?? '/juegos';
 
   return (
     <section className="mx-auto max-w-md px-4 py-12 text-center">
@@ -34,7 +36,7 @@ export function DailyPuzzleHero({
         <StreakDisplay current={streak} />
       </div>
       <Link
-        href="/jugar/wordle"
+        href={route}
         className="mt-6 inline-block rounded-full bg-[var(--color-accent)] px-8 py-3 font-semibold text-[var(--color-accent-contrast)] transition-transform hover:scale-105"
       >
         {alreadyPlayed ? 'VER RESULTADO' : 'JUGAR'}

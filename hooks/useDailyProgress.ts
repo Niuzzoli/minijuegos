@@ -18,45 +18,42 @@ export function useDailyProgress() {
     setHydrated(true);
   }, []);
 
-  const persist = useCallback((next: ProgressStore) => {
-    setStore(next);
-    saveProgressStore(next);
-  }, []);
-
-  const recordAttempt = useCallback(
-    (dateKey: string, attempt: WordleAttempt) => {
+  // Shared by recordAttempt/finishGame: compute the day's next progress
+  // from its current value, persist it, and update state — the one place
+  // that saves to localStorage instead of three.
+  const updateDay = useCallback(
+    (dateKey: string, buildProgress: (existing?: DailyProgress) => DailyProgress) => {
       setStore((current) => {
-        const existing = current[dateKey];
-        const progress: DailyProgress = {
-          game: 'wordle',
-          status: 'in-progress',
-          attempts: [...(existing?.attempts ?? []), attempt],
-        };
-        const next = setDayProgress(current, dateKey, progress);
+        const next = setDayProgress(current, dateKey, buildProgress(current[dateKey]));
         saveProgressStore(next);
         return next;
       });
     },
     [],
+  );
+
+  const recordAttempt = useCallback(
+    (dateKey: string, attempt: WordleAttempt) => {
+      updateDay(dateKey, (existing) => ({
+        game: 'wordle',
+        status: 'in-progress',
+        attempts: [...(existing?.attempts ?? []), attempt],
+      }));
+    },
+    [updateDay],
   );
 
   const finishGame = useCallback(
     (dateKey: string, status: 'won' | 'lost') => {
-      setStore((current) => {
-        const existing = current[dateKey];
-        const progress: DailyProgress = {
-          game: 'wordle',
-          status,
-          attempts: existing?.attempts ?? [],
-          completedAt: new Date().toISOString(),
-        };
-        const next = setDayProgress(current, dateKey, progress);
-        saveProgressStore(next);
-        return next;
-      });
+      updateDay(dateKey, (existing) => ({
+        game: 'wordle',
+        status,
+        attempts: existing?.attempts ?? [],
+        completedAt: new Date().toISOString(),
+      }));
     },
-    [],
+    [updateDay],
   );
 
-  return { store, hydrated, recordAttempt, finishGame, persist };
+  return { store, hydrated, recordAttempt, finishGame };
 }

@@ -14,7 +14,13 @@ export default function TodayPage() {
   const puzzle = getDailyPuzzle(today, SOLUTIONS);
   const { current: streak } = calculateStreak(store, todayKey);
   const todayStatus = store[todayKey]?.status;
-  const alreadyPlayed = hydrated && (todayStatus === 'won' || todayStatus === 'lost');
+  const alreadyPlayed = todayStatus === 'won' || todayStatus === 'lost';
+
+  // Without this gate, Next.js statically prerenders this route at build
+  // time (no dynamic API forces per-request rendering) and bakes the build
+  // machine's date into the HTML — same SSR-safe hydration pattern as
+  // app/jugar/wordle/page.tsx (spec §11).
+  if (!hydrated) return null;
 
   return <DailyPuzzleHero puzzle={puzzle} streak={streak} alreadyPlayed={alreadyPlayed} />;
 }
