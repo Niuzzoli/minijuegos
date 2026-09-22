@@ -37,7 +37,7 @@ export function useDailyProgress() {
       updateDay(dateKey, (existing) => ({
         game: 'wordle',
         status: 'in-progress',
-        attempts: [...(existing?.attempts ?? []), attempt],
+        attempts: [...(existing?.game === 'wordle' ? existing.attempts : []), attempt],
       }));
     },
     [updateDay],
@@ -48,7 +48,7 @@ export function useDailyProgress() {
       updateDay(dateKey, (existing) => ({
         game: 'wordle',
         status,
-        attempts: existing?.attempts ?? [],
+        attempts: existing?.game === 'wordle' ? existing.attempts : [],
         completedAt: new Date().toISOString(),
       }));
     },

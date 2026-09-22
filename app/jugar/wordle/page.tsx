@@ -21,7 +21,7 @@ export default function WordlePage() {
 
   const puzzle = useMemo(() => getDailyWordlePuzzle(today, SOLUTIONS), [today]);
   const dayProgress = store[todayKey];
-  const attempts = dayProgress?.attempts ?? [];
+  const attempts = dayProgress?.game === 'wordle' ? dayProgress.attempts : [];
   const { current: streak } = calculateStreak(store, todayKey);
 
   const isFinished = dayProgress?.status === 'won' || dayProgress?.status === 'lost';
