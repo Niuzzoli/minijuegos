@@ -11,10 +11,33 @@ import { WordleBoard } from '../../../components/WordleBoard';
 import { WordleKeyboard } from '../../../components/WordleKeyboard';
 import { ResultModal } from '../../../components/ResultModal';
 import type { GameResult } from '../../../types/game-result';
+import type { WordleAttempt } from '../../../types/wordle';
 
 export default function WordlePage() {
   const { todayKey, today } = useTodayKey();
-  const { store, hydrated, recordAttempt, finishGame } = useDailyProgress();
+  const { store, hydrated, updateDay } = useDailyProgress();
+  const recordAttempt = useCallback(
+    (dateKey: string, attempt: WordleAttempt) => {
+      updateDay(dateKey, (existing) => ({
+        game: 'wordle',
+        status: 'in-progress',
+        attempts: [...(existing?.game === 'wordle' ? existing.attempts : []), attempt],
+      }));
+    },
+    [updateDay],
+  );
+
+  const finishGame = useCallback(
+    (dateKey: string, status: 'won' | 'lost') => {
+      updateDay(dateKey, (existing) => ({
+        game: 'wordle',
+        status,
+        attempts: existing?.game === 'wordle' ? existing.attempts : [],
+        completedAt: new Date().toISOString(),
+      }));
+    },
+    [updateDay],
+  );
   const [currentGuess, setCurrentGuess] = useState('');
   const [invalidShake, setInvalidShake] = useState(false);
   const [modalDismissed, setModalDismissed] = useState(false);

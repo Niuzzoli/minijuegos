@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import type { DailyProgress, ProgressStore } from '../types/daily-progress';
-import type { WordleAttempt } from '../types/wordle';
 import { loadProgressStore, saveProgressStore, setDayProgress } from '../lib/storage';
 
 export function useDailyProgress() {
@@ -18,9 +17,6 @@ export function useDailyProgress() {
     setHydrated(true);
   }, []);
 
-  // Shared by recordAttempt/finishGame: compute the day's next progress
-  // from its current value, persist it, and update state — the one place
-  // that saves to localStorage instead of three.
   const updateDay = useCallback(
     (dateKey: string, buildProgress: (existing?: DailyProgress) => DailyProgress) => {
       setStore((current) => {
@@ -32,28 +28,5 @@ export function useDailyProgress() {
     [],
   );
 
-  const recordAttempt = useCallback(
-    (dateKey: string, attempt: WordleAttempt) => {
-      updateDay(dateKey, (existing) => ({
-        game: 'wordle',
-        status: 'in-progress',
-        attempts: [...(existing?.game === 'wordle' ? existing.attempts : []), attempt],
-      }));
-    },
-    [updateDay],
-  );
-
-  const finishGame = useCallback(
-    (dateKey: string, status: 'won' | 'lost') => {
-      updateDay(dateKey, (existing) => ({
-        game: 'wordle',
-        status,
-        attempts: existing?.game === 'wordle' ? existing.attempts : [],
-        completedAt: new Date().toISOString(),
-      }));
-    },
-    [updateDay],
-  );
-
-  return { store, hydrated, recordAttempt, finishGame };
+  return { store, hydrated, updateDay };
 }
