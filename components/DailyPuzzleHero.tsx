@@ -5,6 +5,7 @@ import { StreakDisplay } from './StreakDisplay';
 
 const GAME_LABELS: Record<DailyPuzzle['game'], { name: string; description: string }> = {
   wordle: { name: 'WORDLE', description: 'Descubrí la palabra en 6 intentos.' },
+  sudoku: { name: 'SUDOKU', description: 'Completá la grilla del 1 al 9.' },
 };
 
 function formatDate(dateKey: string): string {
