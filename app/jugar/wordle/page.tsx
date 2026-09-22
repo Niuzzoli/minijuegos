@@ -5,6 +5,7 @@ import { useTodayKey } from '../../../hooks/useTodayKey';
 import { useDailyProgress } from '../../../hooks/useDailyProgress';
 import { getDailyWordlePuzzle } from '../../../lib/daily-puzzle';
 import { calculateStreak } from '../../../lib/streak';
+import { filterStoreByGame } from '../../../lib/progress-filter';
 import { SOLUTIONS } from '../../../data/words/solutions';
 import { evaluateGuess, mergeLetterStates, WORD_LENGTH, MAX_ATTEMPTS } from '../../../lib/wordle-engine';
 import { WordleBoard } from '../../../components/WordleBoard';
@@ -18,7 +19,7 @@ export default function WordlePage() {
   const { store, hydrated, updateDay } = useDailyProgress();
   const recordAttempt = useCallback(
     (dateKey: string, attempt: WordleAttempt) => {
-      updateDay(dateKey, (existing) => ({
+      updateDay('wordle', dateKey, (existing) => ({
         game: 'wordle',
         status: 'in-progress',
         attempts: [...(existing?.game === 'wordle' ? existing.attempts : []), attempt],
@@ -29,7 +30,7 @@ export default function WordlePage() {
 
   const finishGame = useCallback(
     (dateKey: string, status: 'won' | 'lost') => {
-      updateDay(dateKey, (existing) => ({
+      updateDay('wordle', dateKey, (existing) => ({
         game: 'wordle',
         status,
         attempts: existing?.game === 'wordle' ? existing.attempts : [],
@@ -43,9 +44,10 @@ export default function WordlePage() {
   const [modalDismissed, setModalDismissed] = useState(false);
 
   const puzzle = useMemo(() => getDailyWordlePuzzle(today, SOLUTIONS), [today]);
-  const dayProgress = store[todayKey];
+  const wordleStore = filterStoreByGame(store, 'wordle');
+  const dayProgress = wordleStore[todayKey];
   const attempts = dayProgress?.game === 'wordle' ? dayProgress.attempts : [];
-  const { current: streak } = calculateStreak(store, todayKey);
+  const { current: streak } = calculateStreak(wordleStore, todayKey);
 
   const isFinished = dayProgress?.status === 'won' || dayProgress?.status === 'lost';
 

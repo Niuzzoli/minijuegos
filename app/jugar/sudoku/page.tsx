@@ -14,12 +14,7 @@ import { StreakDisplay } from '../../../components/StreakDisplay';
 import type { SudokuBoard as SudokuBoardType } from '../../../types/sudoku';
 
 // index = row * 9 + col (spec §1/§9 — same row-major layout as SudokuBoard).
-const ARROW_DELTAS: Record<string, number> = {
-  ArrowUp: -9,
-  ArrowDown: 9,
-  ArrowLeft: -1,
-  ArrowRight: 1,
-};
+const ARROW_KEYS = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']);
 
 export default function SudokuPage() {
   const { todayKey, today } = useTodayKey();
@@ -28,13 +23,6 @@ export default function SudokuPage() {
   const [checkMessage, setCheckMessage] = useState<string | null>(null);
 
   const puzzle = getDailySudokuPuzzle(today, SUDOKU_PUZZLES);
-  if (puzzle.game !== 'sudoku') {
-    // getDailySudokuPuzzle's declared return type is the DailyPuzzle union
-    // (shared with getDailyWordlePuzzle), but it always builds a `game:
-    // 'sudoku'` object — this check narrows `puzzle` so `.givens` below
-    // type-checks; it can never actually throw.
-    throw new Error('getDailySudokuPuzzle must return a sudoku puzzle');
-  }
   const sudokuStore = filterStoreByGame(store, 'sudoku');
   const dayProgress = sudokuStore[todayKey];
   const isFinished = dayProgress?.status === 'won';
@@ -63,8 +51,7 @@ export default function SudokuPage() {
       // Same OS/browser-shortcut guard used by WordleKeyboard.tsx and
       // SudokuNumpad.tsx — don't hijack Ctrl/Cmd/Alt+Arrow combos.
       if (event.ctrlKey || event.metaKey || event.altKey) return;
-      const delta = ARROW_DELTAS[event.key];
-      if (delta === undefined) return;
+      if (!ARROW_KEYS.has(event.key)) return;
 
       // Prevent the page from scrolling under the board while navigating it.
       event.preventDefault();
@@ -95,10 +82,14 @@ export default function SudokuPage() {
     if (isFinished || selected === null) return;
     if (puzzle.givens[selected] !== '0') return;
 
-    const nextBoard = [...board];
-    nextBoard[selected] = value;
     setCheckMessage(null);
-    updateDay(todayKey, () => ({ game: 'sudoku', status: 'in-progress', board: nextBoard }));
+    updateDay('sudoku', todayKey, (existing) => {
+      const prevBoard: SudokuBoardType =
+        existing?.game === 'sudoku' ? existing.board : puzzle.givens.split('').map(Number);
+      const nextBoard = [...prevBoard];
+      nextBoard[selected] = value;
+      return { game: 'sudoku', status: 'in-progress', board: nextBoard };
+    });
   };
 
   const handleErase = () => writeCell(0);
@@ -106,7 +97,7 @@ export default function SudokuPage() {
   const handleCheck = () => {
     if (!isBoardComplete(board)) return;
     if (boardMatchesSolution(board, puzzle.solution)) {
-      updateDay(todayKey, () => ({
+      updateDay('sudoku', todayKey, () => ({
         game: 'sudoku',
         status: 'won',
         board,

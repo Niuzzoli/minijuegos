@@ -84,6 +84,30 @@ Sudoku nunca usa `status: 'lost'` (spec §2 — sin derrota), pero comparte el
 tipo `GameStatus` en vez de inventar uno paralelo, para no duplicar el
 concepto de "en progreso" innecesariamente.
 
+**Formato de la clave de `ProgressStore`:** `DailyProgress` es una unión
+discriminada por VALOR (campo `game`), pero la clave del store es un string
+aparte que un consumidor tiene que elegir — no hay nada en el tipo que la
+ate al valor. La clave **debe** ser compuesta, `` `${game}:${dateKey}` ``
+(p. ej. `"sudoku:2026-09-22"`), nunca el `dateKey` a secas. Con clave bare
+(`"2026-09-22"`), Wordle y Sudoku jugados el mismo día escriben en la misma
+entrada y uno pisa el progreso del otro — un bug de pérdida de datos
+silenciosa que rompió esta misma feature una vez (ver el fix de C1 en el
+review final de la rama Sudoku). Convenciones que dependen de este formato:
+
+- `lib/storage.ts` (`getDayProgress`/`setDayProgress`) permanece agnóstico:
+  toma la clave ya compuesta como un string opaco.
+- `hooks/useDailyProgress.ts` construye la clave: `updateDay(game, dateKey,
+  buildProgress)` arma `` `${game}:${dateKey}` `` internamente antes de leer
+  o escribir en el store.
+- `lib/progress-filter.ts` (`filterStoreByGame`) filtra por el prefijo
+  `` `${game}:` `` y lo recorta del resultado, de modo que su salida sea un
+  `ProgressStore` con clave `dateKey` plano — así `calculateStreak`/
+  `calculateStats`, que tratan las claves del store como fechas
+  directamente, no necesitan saber nada de este esquema compuesto.
+
+Cualquier juego nuevo (Connections, Memory) sigue esta misma convención:
+nunca escribir/leer con `dateKey` a secas como clave del store.
+
 ## 4. Generación del pool de puzzles
 
 Un script Node, **`scripts/generate-sudoku-puzzles.mjs`**, genera el pool

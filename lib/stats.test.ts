@@ -57,9 +57,11 @@ describe('calculateSudokuStats', () => {
   });
 
   it('counts only sudoku entries, ignoring wordle entries in the same store', () => {
+    // Real store keys are composite `${game}:${dateKey}` (calculateSudokuStats
+    // filters internally via filterStoreByGame, which now keys off that prefix).
     const store: ProgressStore = {
-      '2026-09-20': { game: 'wordle', status: 'won', attempts: [] },
-      '2026-09-21': { game: 'sudoku', status: 'won', board: new Array(81).fill(1), completedAt: 'x' },
+      'wordle:2026-09-20': { game: 'wordle', status: 'won', attempts: [] },
+      'sudoku:2026-09-21': { game: 'sudoku', status: 'won', board: new Array(81).fill(1), completedAt: 'x' },
     };
     const stats = calculateSudokuStats(store, '2026-09-21');
     expect(stats.played).toBe(1);
@@ -69,7 +71,7 @@ describe('calculateSudokuStats', () => {
 
   it('a wordle-only store filtered for sudoku yields all-zero stats', () => {
     const store: ProgressStore = {
-      '2026-09-20': { game: 'wordle', status: 'won', attempts: [] },
+      'wordle:2026-09-20': { game: 'wordle', status: 'won', attempts: [] },
     };
     expect(calculateSudokuStats(store, '2026-09-20')).toEqual({
       played: 0,

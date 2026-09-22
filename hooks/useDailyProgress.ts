@@ -18,9 +18,14 @@ export function useDailyProgress() {
   }, []);
 
   const updateDay = useCallback(
-    (dateKey: string, buildProgress: (existing?: DailyProgress) => DailyProgress) => {
+    (
+      game: string,
+      dateKey: string,
+      buildProgress: (existing?: DailyProgress) => DailyProgress,
+    ) => {
       setStore((current) => {
-        const next = setDayProgress(current, dateKey, buildProgress(current[dateKey]));
+        const key = `${game}:${dateKey}`;
+        const next = setDayProgress(current, key, buildProgress(current[key]));
         saveProgressStore(next);
         return next;
       });

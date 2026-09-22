@@ -19,6 +19,7 @@ h1, h2, h3, .font-heading {
   --color-accent-contrast: #ffffff;
   --color-present: #ca8a04;
   --color-absent: #a1a1aa;
+  --color-entered: #1d4ed8;
 }
 
 [data-theme='dark'] {
@@ -31,6 +32,7 @@ h1, h2, h3, .font-heading {
   --color-accent-contrast: #052e13;
   --color-present: #eab308;
   --color-absent: #3f3f46;
+  --color-entered: #60a5fa;
 }
 
 body {

@@ -14,7 +14,10 @@ function dailyIndexForPool(date: Date, poolLength: number): number {
   return nonNegativeModulo(daysSinceLaunch, poolLength);
 }
 
-export function getDailyWordlePuzzle(date: Date, solutions: readonly string[]): DailyPuzzle {
+export function getDailyWordlePuzzle(
+  date: Date,
+  solutions: readonly string[],
+): Extract<DailyPuzzle, { game: 'wordle' }> {
   const index = dailyIndexForPool(date, solutions.length);
   return {
     id: `wordle-${index}`,
@@ -27,7 +30,7 @@ export function getDailyWordlePuzzle(date: Date, solutions: readonly string[]): 
 export function getDailySudokuPuzzle(
   date: Date,
   puzzles: readonly { givens: string; solution: string }[],
-): DailyPuzzle {
+): Extract<DailyPuzzle, { game: 'sudoku' }> {
   const index = dailyIndexForPool(date, puzzles.length);
   return {
     id: `sudoku-${index}`,

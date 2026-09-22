@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import type { DailyPuzzle } from '../types/daily-puzzle';
 import { StreakDisplay } from './StreakDisplay';
 
 function formatDate(dateKey: string): string {
@@ -9,14 +8,14 @@ function formatDate(dateKey: string): string {
 }
 
 export function PuzzleOfDayCard({
-  puzzle,
+  dateKey,
   streak,
   alreadyPlayed,
   gameName,
   gameDescription,
   playRoute,
 }: {
-  puzzle: DailyPuzzle;
+  dateKey: string;
   streak: number;
   alreadyPlayed: boolean;
   gameName: string;
@@ -26,7 +25,7 @@ export function PuzzleOfDayCard({
   return (
     <div className="w-full max-w-xs rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-center">
       <p className="text-xs font-semibold tracking-widest text-[var(--color-text-muted)]">
-        PUZZLE DEL DÍA — {formatDate(puzzle.date)}
+        PUZZLE DEL DÍA — {formatDate(dateKey)}
       </p>
       <h2 className="font-heading mt-1 text-2xl font-bold">{gameName}</h2>
       <p className="mt-1 text-sm text-[var(--color-text-muted)]">{gameDescription}</p>
