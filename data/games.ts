@@ -18,7 +18,13 @@ export const GAMES: GameMeta[] = [
     available: true,
     route: '/jugar/wordle',
   },
-  { id: 'sudoku', name: 'Sudoku', description: 'Próximamente.', available: false },
+  {
+    id: 'sudoku',
+    name: 'Sudoku',
+    description: 'Completá la grilla del 1 al 9.',
+    available: true,
+    route: '/jugar/sudoku',
+  },
   { id: 'connections', name: 'Connections', description: 'Próximamente.', available: false },
   { id: 'memory', name: 'Memory', description: 'Próximamente.', available: false },
 ];
