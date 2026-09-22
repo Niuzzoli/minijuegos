@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Session-local git worktrees (e.g. .claude/worktrees/<name>) live inside
+    // the repo tree and carry their own .next build cache, which the pattern
+    // above doesn't reach since it's not anchored to nested paths.
+    "**/.claude/**",
   ]),
 ]);
 
