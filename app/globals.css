@@ -20,6 +20,11 @@ h1, h2, h3, .font-heading {
   --color-present: #ca8a04;
   --color-absent: #a1a1aa;
   --color-entered: #1d4ed8;
+  --color-connections-yellow: #ca8a04;
+  --color-connections-green: #15803d;
+  --color-connections-blue: #1d4ed8;
+  --color-connections-purple: #7e22ce;
+  --color-connections-contrast: #ffffff;
 }
 
 [data-theme='dark'] {
@@ -33,6 +38,11 @@ h1, h2, h3, .font-heading {
   --color-present: #eab308;
   --color-absent: #3f3f46;
   --color-entered: #60a5fa;
+  --color-connections-yellow: #eab308;
+  --color-connections-green: #22c55e;
+  --color-connections-blue: #60a5fa;
+  --color-connections-purple: #c084fc;
+  --color-connections-contrast: #0a0a0b;
 }
 
 body {
