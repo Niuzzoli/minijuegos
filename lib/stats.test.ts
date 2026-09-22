@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateStats } from './stats';
+import { calculateStats, calculateSudokuStats } from './stats';
 import type { ProgressStore } from '../types/daily-progress';
 import type { WordleAttempt } from '../types/wordle';
 
@@ -42,5 +42,41 @@ describe('calculateStats', () => {
     expect(stats.winPercentage).toBe(67); // round(2/3 * 100)
     expect(stats.attemptsDistribution[3]).toBe(2);
     expect(stats.attemptsDistribution[1]).toBe(0);
+  });
+});
+
+describe('calculateSudokuStats', () => {
+  it('returns all zeros for an empty store', () => {
+    expect(calculateSudokuStats({}, '2026-09-21')).toEqual({
+      played: 0,
+      won: 0,
+      winPercentage: 0,
+      currentStreak: 0,
+      bestStreak: 0,
+    });
+  });
+
+  it('counts only sudoku entries, ignoring wordle entries in the same store', () => {
+    const store: ProgressStore = {
+      '2026-09-20': { game: 'wordle', status: 'won', attempts: [] },
+      '2026-09-21': { game: 'sudoku', status: 'won', board: new Array(81).fill(1), completedAt: 'x' },
+    };
+    const stats = calculateSudokuStats(store, '2026-09-21');
+    expect(stats.played).toBe(1);
+    expect(stats.won).toBe(1);
+    expect(stats.currentStreak).toBe(1);
+  });
+
+  it('a wordle-only store filtered for sudoku yields all-zero stats', () => {
+    const store: ProgressStore = {
+      '2026-09-20': { game: 'wordle', status: 'won', attempts: [] },
+    };
+    expect(calculateSudokuStats(store, '2026-09-20')).toEqual({
+      played: 0,
+      won: 0,
+      winPercentage: 0,
+      currentStreak: 0,
+      bestStreak: 0,
+    });
   });
 });
