@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateStats, calculateSudokuStats } from './stats';
+import { calculateStats, calculateSudokuStats, calculateConnectionsStats } from './stats';
 import type { ProgressStore } from '../types/daily-progress';
 import type { WordleAttempt } from '../types/wordle';
 
@@ -74,6 +74,67 @@ describe('calculateSudokuStats', () => {
       'wordle:2026-09-20': { game: 'wordle', status: 'won', attempts: [] },
     };
     expect(calculateSudokuStats(store, '2026-09-20')).toEqual({
+      played: 0,
+      won: 0,
+      winPercentage: 0,
+      currentStreak: 0,
+      bestStreak: 0,
+    });
+  });
+});
+
+describe('calculateConnectionsStats', () => {
+  it('returns all zeros for an empty store', () => {
+    expect(calculateConnectionsStats({}, '2026-09-21')).toEqual({
+      played: 0,
+      won: 0,
+      winPercentage: 0,
+      currentStreak: 0,
+      bestStreak: 0,
+    });
+  });
+
+  it('counts only connections entries, ignoring wordle/sudoku entries in the same store', () => {
+    const store: ProgressStore = {
+      'wordle:2026-09-19': { game: 'wordle', status: 'won', attempts: [] },
+      'sudoku:2026-09-20': { game: 'sudoku', status: 'won', board: new Array(81).fill(1) },
+      'connections:2026-09-21': {
+        game: 'connections',
+        status: 'won',
+        solvedCategories: [],
+        mistakesMade: 1,
+        guessHistory: [],
+        completedAt: 'x',
+      },
+    };
+    const stats = calculateConnectionsStats(store, '2026-09-21');
+    expect(stats.played).toBe(1);
+    expect(stats.won).toBe(1);
+    expect(stats.currentStreak).toBe(1);
+  });
+
+  it('a lost connections entry counts as played but not won', () => {
+    const store: ProgressStore = {
+      'connections:2026-09-21': {
+        game: 'connections',
+        status: 'lost',
+        solvedCategories: [],
+        mistakesMade: 4,
+        guessHistory: [],
+        completedAt: 'x',
+      },
+    };
+    const stats = calculateConnectionsStats(store, '2026-09-21');
+    expect(stats.played).toBe(1);
+    expect(stats.won).toBe(0);
+    expect(stats.currentStreak).toBe(0);
+  });
+
+  it('a wordle-only store filtered for connections yields all-zero stats', () => {
+    const store: ProgressStore = {
+      'wordle:2026-09-20': { game: 'wordle', status: 'won', attempts: [] },
+    };
+    expect(calculateConnectionsStats(store, '2026-09-20')).toEqual({
       played: 0,
       won: 0,
       winPercentage: 0,

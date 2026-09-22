@@ -11,3 +11,5 @@ export type WordleStats = BaseGameStats & {
 };
 
 export type SudokuStats = BaseGameStats;
+
+export type ConnectionsStats = BaseGameStats;

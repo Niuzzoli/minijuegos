@@ -1,5 +1,5 @@
 import type { ProgressStore } from '../types/daily-progress';
-import type { WordleStats, SudokuStats } from '../types/user-stats';
+import type { WordleStats, SudokuStats, ConnectionsStats } from '../types/user-stats';
 import { calculateStreak } from './streak';
 import { filterStoreByGame } from './progress-filter';
 
@@ -49,6 +49,28 @@ export function calculateSudokuStats(store: ProgressStore, todayKey: string): Su
   const winPercentage = played === 0 ? 0 : Math.round((won / played) * 100);
 
   const { current, best } = calculateStreak(sudokuStore, todayKey);
+
+  return {
+    played,
+    won,
+    winPercentage,
+    currentStreak: current,
+    bestStreak: best,
+  };
+}
+
+// Same self-contained shape as calculateSudokuStats: filters internally via
+// filterStoreByGame, so callers don't have to pre-filter (unlike calculateStats).
+export function calculateConnectionsStats(store: ProgressStore, todayKey: string): ConnectionsStats {
+  const connectionsStore = filterStoreByGame(store, 'connections');
+  const finishedEntries = Object.values(connectionsStore).filter((p) => p.status !== 'in-progress');
+  const wonEntries = finishedEntries.filter((p) => p.status === 'won');
+
+  const played = finishedEntries.length;
+  const won = wonEntries.length;
+  const winPercentage = played === 0 ? 0 : Math.round((won / played) * 100);
+
+  const { current, best } = calculateStreak(connectionsStore, todayKey);
 
   return {
     played,
