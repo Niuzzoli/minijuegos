@@ -6,14 +6,7 @@ import { useDailyProgress } from '../../../hooks/useDailyProgress';
 import { getDailyPuzzle } from '../../../lib/daily-puzzle';
 import { calculateStreak } from '../../../lib/streak';
 import { SOLUTIONS } from '../../../data/words/solutions';
-import { VALID_GUESSES } from '../../../data/words/valid-guesses';
-import {
-  evaluateGuess,
-  isWordValid,
-  mergeLetterStates,
-  WORD_LENGTH,
-  MAX_ATTEMPTS,
-} from '../../../lib/wordle-engine';
+import { evaluateGuess, mergeLetterStates, WORD_LENGTH, MAX_ATTEMPTS } from '../../../lib/wordle-engine';
 import { WordleBoard } from '../../../components/WordleBoard';
 import { WordleKeyboard } from '../../../components/WordleKeyboard';
 import { ResultModal } from '../../../components/ResultModal';
@@ -24,6 +17,7 @@ export default function WordlePage() {
   const { store, hydrated, recordAttempt, finishGame } = useDailyProgress();
   const [currentGuess, setCurrentGuess] = useState('');
   const [invalidShake, setInvalidShake] = useState(false);
+  const [modalDismissed, setModalDismissed] = useState(false);
 
   const puzzle = useMemo(() => getDailyPuzzle(today, SOLUTIONS), [today]);
   const dayProgress = store[todayKey];
@@ -33,12 +27,13 @@ export default function WordlePage() {
   const isFinished = dayProgress?.status === 'won' || dayProgress?.status === 'lost';
 
   useEffect(() => {
-    // Reset the in-progress guess when the day changes (detected by
-    // useTodayKey via mount/visibilitychange/focus, spec §6) — clearing
-    // local UI state in response to an external signal, not a cascading
-    // re-render.
+    // Reset the in-progress guess and the dismissed-modal flag when the day
+    // changes (detected by useTodayKey via mount/visibilitychange/focus,
+    // spec §6) — clearing local UI state in response to an external signal,
+    // not a cascading re-render.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentGuess('');
+    setModalDismissed(false);
   }, [todayKey]);
 
   const handleKey = useCallback(
@@ -51,13 +46,15 @@ export default function WordlePage() {
       }
 
       if (key === 'ENTER') {
-        if (currentGuess.length !== WORD_LENGTH) return;
-        if (!isWordValid(currentGuess, VALID_GUESSES)) {
+        if (currentGuess.length !== WORD_LENGTH) {
+          // Not enough letters yet — shake instead of silently ignoring.
           setInvalidShake(true);
           setTimeout(() => setInvalidShake(false), 400);
           return;
         }
 
+        // Any 5-letter combination is accepted as a guess and colored
+        // against the solution — no dictionary lookup required.
         const result = evaluateGuess(currentGuess, puzzle.solution);
         recordAttempt(todayKey, { guess: currentGuess.toUpperCase(), result });
         setCurrentGuess('');
@@ -99,8 +96,13 @@ export default function WordlePage() {
         <WordleBoard attempts={attempts} currentGuess={currentGuess} maxAttempts={MAX_ATTEMPTS} />
       </div>
       <WordleKeyboard onKey={handleKey} letterStates={letterStates} />
-      {result && (
-        <ResultModal result={result} dateLabel={dateLabel} attemptGrid={attemptGrid} onClose={() => {}} />
+      {result && !modalDismissed && (
+        <ResultModal
+          result={result}
+          dateLabel={dateLabel}
+          attemptGrid={attemptGrid}
+          onClose={() => setModalDismissed(true)}
+        />
       )}
     </div>
   );

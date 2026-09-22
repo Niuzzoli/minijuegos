@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react';
 import Link from 'next/link';
+import { X } from 'lucide-react';
 import type { GameResult } from '../types/game-result';
 import { StreakDisplay } from './StreakDisplay';
 import { ShareButton } from './ShareButton';
@@ -25,8 +26,16 @@ export function ResultModal({
         initial={{ opacity: 0, scale: 0.95, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="w-full max-w-sm rounded-2xl bg-[var(--color-surface)] p-6 text-center shadow-xl"
+        className="relative w-full max-w-sm rounded-2xl bg-[var(--color-surface)] p-6 text-center shadow-xl"
       >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Cerrar y ver el tablero"
+          className="absolute right-3 top-3 rounded-full p-1.5 text-[var(--color-text-muted)] transition-colors hover:bg-[var(--color-border)] hover:text-[var(--color-text)]"
+        >
+          <X size={18} />
+        </button>
         <p className="text-4xl">{won ? '🎉' : '😕'}</p>
         <h2 className="font-heading mt-2 text-2xl font-bold">
           {won ? '¡LO RESOLVISTE!' : 'CASI'}
