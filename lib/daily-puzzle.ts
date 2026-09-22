@@ -1,4 +1,5 @@
 import type { DailyPuzzle } from '../types/daily-puzzle';
+import type { ConnectionsCategory } from '../types/connections';
 import { diffInDays, getTodayKey } from './date';
 
 // Fixed epoch anchor for the daily index. MUST NEVER CHANGE after shipping —
@@ -38,5 +39,18 @@ export function getDailySudokuPuzzle(
     game: 'sudoku',
     givens: puzzles[index].givens,
     solution: puzzles[index].solution,
+  };
+}
+
+export function getDailyConnectionsPuzzle(
+  date: Date,
+  puzzles: readonly { categories: ConnectionsCategory[] }[],
+): Extract<DailyPuzzle, { game: 'connections' }> {
+  const index = dailyIndexForPool(date, puzzles.length);
+  return {
+    id: `connections-${index}`,
+    date: getTodayKey(date),
+    game: 'connections',
+    categories: puzzles[index].categories,
   };
 }
