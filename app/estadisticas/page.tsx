@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { calculateStats, calculateSudokuStats } from '../../lib/stats';
+import { calculateStats, calculateSudokuStats, calculateConnectionsStats } from '../../lib/stats';
 import { loadProgressStore } from '../../lib/storage';
 import { useTodayKey } from '../../hooks/useTodayKey';
 import { filterStoreByGame } from '../../lib/progress-filter';
 import { StatsPanel } from '../../components/StatsPanel';
-import type { WordleStats, SudokuStats } from '../../types/user-stats';
+import type { WordleStats, SudokuStats, ConnectionsStats } from '../../types/user-stats';
 
 const EMPTY_WORDLE_STATS: WordleStats = {
   played: 0,
@@ -25,10 +25,19 @@ const EMPTY_SUDOKU_STATS: SudokuStats = {
   bestStreak: 0,
 };
 
+const EMPTY_CONNECTIONS_STATS: ConnectionsStats = {
+  played: 0,
+  won: 0,
+  winPercentage: 0,
+  currentStreak: 0,
+  bestStreak: 0,
+};
+
 export default function StatsPage() {
   const { todayKey } = useTodayKey();
   const [wordleStats, setWordleStats] = useState<WordleStats>(EMPTY_WORDLE_STATS);
   const [sudokuStats, setSudokuStats] = useState<SudokuStats>(EMPTY_SUDOKU_STATS);
+  const [connectionsStats, setConnectionsStats] = useState<ConnectionsStats>(EMPTY_CONNECTIONS_STATS);
 
   useEffect(() => {
     const store = loadProgressStore();
@@ -39,6 +48,7 @@ export default function StatsPage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setWordleStats(calculateStats(filterStoreByGame(store, 'wordle'), todayKey));
     setSudokuStats(calculateSudokuStats(store, todayKey));
+    setConnectionsStats(calculateConnectionsStats(store, todayKey));
   }, [todayKey]);
 
   return (
@@ -51,6 +61,10 @@ export default function StatsPage() {
       <section>
         <h2 className="font-heading mx-auto max-w-md px-4 pt-2 text-lg font-semibold">Sudoku</h2>
         <StatsPanel stats={sudokuStats} />
+      </section>
+      <section>
+        <h2 className="font-heading mx-auto max-w-md px-4 pt-2 text-lg font-semibold">Connections</h2>
+        <StatsPanel stats={connectionsStats} />
       </section>
     </div>
   );

@@ -18,7 +18,7 @@ export function TodayView() {
   const cards = GAMES.filter((game) => game.available && game.route).map((game) => {
     const gameStore = filterStoreByGame(store, game.id);
     const status = gameStore[todayKey]?.status;
-    const alreadyPlayed = game.id === 'wordle' ? status === 'won' || status === 'lost' : status === 'won';
+    const alreadyPlayed = status === 'won' || status === 'lost';
     const { current: streak } = calculateStreak(gameStore, todayKey);
 
     return (

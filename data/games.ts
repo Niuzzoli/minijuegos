@@ -25,6 +25,12 @@ export const GAMES: GameMeta[] = [
     available: true,
     route: '/jugar/sudoku',
   },
-  { id: 'connections', name: 'Connections', description: 'Próximamente.', available: false },
+  {
+    id: 'connections',
+    name: 'Connections',
+    description: 'Agrupá las 16 palabras en 4 categorías.',
+    available: true,
+    route: '/jugar/connections',
+  },
   { id: 'memory', name: 'Memory', description: 'Próximamente.', available: false },
 ];
