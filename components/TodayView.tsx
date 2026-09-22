@@ -2,7 +2,7 @@
 
 import { useTodayKey } from '../hooks/useTodayKey';
 import { useDailyProgress } from '../hooks/useDailyProgress';
-import { getDailyPuzzle } from '../lib/daily-puzzle';
+import { getDailyWordlePuzzle } from '../lib/daily-puzzle';
 import { calculateStreak } from '../lib/streak';
 import { SOLUTIONS } from '../data/words/solutions';
 import { DailyPuzzleHero } from './DailyPuzzleHero';
@@ -11,7 +11,7 @@ export function TodayView() {
   const { todayKey, today } = useTodayKey();
   const { store } = useDailyProgress();
 
-  const puzzle = getDailyPuzzle(today, SOLUTIONS);
+  const puzzle = getDailyWordlePuzzle(today, SOLUTIONS);
   const { current: streak } = calculateStreak(store, todayKey);
   const todayStatus = store[todayKey]?.status;
   // Before hydration, `store` is `{}` (spec §11's neutral state), so this

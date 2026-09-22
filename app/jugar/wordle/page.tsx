@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTodayKey } from '../../../hooks/useTodayKey';
 import { useDailyProgress } from '../../../hooks/useDailyProgress';
-import { getDailyPuzzle } from '../../../lib/daily-puzzle';
+import { getDailyWordlePuzzle } from '../../../lib/daily-puzzle';
 import { calculateStreak } from '../../../lib/streak';
 import { SOLUTIONS } from '../../../data/words/solutions';
 import { evaluateGuess, mergeLetterStates, WORD_LENGTH, MAX_ATTEMPTS } from '../../../lib/wordle-engine';
@@ -19,7 +19,7 @@ export default function WordlePage() {
   const [invalidShake, setInvalidShake] = useState(false);
   const [modalDismissed, setModalDismissed] = useState(false);
 
-  const puzzle = useMemo(() => getDailyPuzzle(today, SOLUTIONS), [today]);
+  const puzzle = useMemo(() => getDailyWordlePuzzle(today, SOLUTIONS), [today]);
   const dayProgress = store[todayKey];
   const attempts = dayProgress?.attempts ?? [];
   const { current: streak } = calculateStreak(store, todayKey);
