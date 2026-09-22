@@ -87,7 +87,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
       { title: 'Figuras geométricas', color: 'yellow', items: ['Círculo', 'Cuadrado', 'Triángulo', 'Rectángulo'] },
       { title: 'Partes de una casa', color: 'green', items: ['Techo', 'Puerta', 'Ventana', 'Pared'] },
       { title: 'Sinónimos de "casa"', color: 'blue', items: ['Hogar', 'Vivienda', 'Morada', 'Domicilio'] },
-      { title: 'Terminan en "-dad"', color: 'purple', items: ['Ciudad', 'Bondad', 'Verdad', 'Amistad'] },
+      { title: 'Terminan en "-dad"', color: 'purple', items: ['Ciudad', 'Bondad', 'Verdad', 'Maldad'] },
     ],
   },
   {
@@ -111,7 +111,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
       { title: 'Utensilios de cocina', color: 'yellow', items: ['Cuchara', 'Tenedor', 'Cuchillo', 'Sartén'] },
       { title: 'Bebidas calientes', color: 'green', items: ['Café', 'Té', 'Mate', 'Chocolate'] },
       { title: 'Postres', color: 'blue', items: ['Flan', 'Helado', 'Torta', 'Alfajor'] },
-      { title: 'Empiezan con "TÉ"', color: 'purple', items: ['Técnico', 'Telón', 'Tétrico', 'Témpano'] },
+      { title: 'Empiezan con "TÉ"', color: 'purple', items: ['Técnico', 'Térmico', 'Tétrico', 'Témpano'] },
     ],
   },
   {

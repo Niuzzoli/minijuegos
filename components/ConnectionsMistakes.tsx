@@ -4,13 +4,12 @@ export function ConnectionsMistakes({ mistakesMade }: { mistakesMade: number }) 
   const remaining = MAX_MISTAKES - mistakesMade;
 
   return (
-    <div
-      role="status"
-      aria-label={`Te quedan ${remaining} ${remaining === 1 ? 'error' : 'errores'}`}
-      className="flex items-center gap-2"
-    >
+    <div role="status" className="flex items-center gap-2">
       <span className="text-xs font-semibold tracking-wide text-[var(--color-text-muted)]">
         ERRORES:
+      </span>
+      <span className="sr-only">
+        Te quedan {remaining} {remaining === 1 ? 'error' : 'errores'}
       </span>
       <div className="flex gap-1.5">
         {Array.from({ length: MAX_MISTAKES }, (_, i) => {

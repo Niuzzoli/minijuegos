@@ -1,7 +1,7 @@
 // app/jugar/connections/page.tsx
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTodayKey } from '../../../hooks/useTodayKey';
 import { useDailyProgress } from '../../../hooks/useDailyProgress';
 import { getDailyConnectionsPuzzle } from '../../../lib/daily-puzzle';
@@ -10,7 +10,7 @@ import { filterStoreByGame } from '../../../lib/progress-filter';
 import { evaluateGuess, colorForItem, MAX_MISTAKES } from '../../../lib/connections-engine';
 import { shuffleDeterministic, hashStringToSeed } from '../../../lib/deterministic-shuffle';
 import { CONNECTIONS_PUZZLES } from '../../../data/connections/puzzles';
-import { ConnectionsGrid } from '../../../components/ConnectionsGrid';
+import { ConnectionsGrid, type ConnectionsGridHandle } from '../../../components/ConnectionsGrid';
 import { ConnectionsCategoryBanner } from '../../../components/ConnectionsCategoryBanner';
 import { ConnectionsMistakes } from '../../../components/ConnectionsMistakes';
 import { ConnectionsShareButton } from '../../../components/ConnectionsShareButton';
@@ -22,6 +22,7 @@ export default function ConnectionsPage() {
   const { store, hydrated, updateDay } = useDailyProgress();
   const [selected, setSelected] = useState<string[]>([]);
   const [message, setMessage] = useState<string | null>(null);
+  const gridRef = useRef<ConnectionsGridHandle>(null);
 
   const puzzle = getDailyConnectionsPuzzle(today, CONNECTIONS_PUZZLES);
   const connectionsStore = filterStoreByGame(store, 'connections');
@@ -90,6 +91,16 @@ export default function ConnectionsPage() {
       }));
       setSelected([]);
       setMessage(null);
+      if (!won) {
+        // The 4 just-solved cells unmount, so there's no "last toggled" cell
+        // left for the grid's own focus-follow effect to target — move
+        // focus to the first remaining item instead of letting it drop to
+        // <body>. (If this guess won the game, the whole grid unmounts and
+        // the finished-state heading takes over, so nothing to focus here.)
+        const nextSolvedItemSet = new Set(nextSolved.flatMap((c) => c.items));
+        const nextRemaining = displayOrder.filter((item) => !nextSolvedItemSet.has(item));
+        gridRef.current?.focusItem(nextRemaining[0]);
+      }
       return;
     }
 
@@ -110,8 +121,14 @@ export default function ConnectionsPage() {
       setMessage('¡Uno más!');
       setTimeout(() => setMessage(null), 2000);
     } else {
-      setMessage(null);
+      setMessage('No es una categoría.');
+      setTimeout(() => setMessage(null), 2000);
     }
+
+    // No explicit focus call needed here: none of the 4 selected cells
+    // unmount on a wrong/one-away guess, so ConnectionsGrid's own
+    // focus-follows-toggle effect re-focuses the last-toggled cell once
+    // `selected` clears (see ConnectionsGrid.tsx).
   };
 
   if (!hydrated) return null;
@@ -147,7 +164,12 @@ export default function ConnectionsPage() {
 
       {status === 'in-progress' && (
         <>
-          <ConnectionsGrid items={remainingItems} selected={selected} onToggle={handleToggle} />
+          <ConnectionsGrid
+            ref={gridRef}
+            items={remainingItems}
+            selected={selected}
+            onToggle={handleToggle}
+          />
           <button
             type="button"
             onClick={handleSubmit}
