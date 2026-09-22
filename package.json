@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate:sudoku": "tsx scripts/generate-sudoku-puzzles.ts"
   },
   "dependencies": {
     "lucide-react": "^1.47.0",
@@ -27,6 +28,7 @@
     "eslint-config-next": "16.3.5",
     "happy-dom": "^20.14.5",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^4.1.11"
   }
