@@ -47,7 +47,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
       { title: 'Estaciones del año', color: 'yellow', items: ['Verano', 'Otoño', 'Invierno', 'Primavera'] },
       { title: 'Fases de la luna', color: 'green', items: ['Llena', 'Nueva', 'Creciente', 'Menguante'] },
       { title: 'Tipos de nubes', color: 'blue', items: ['Cúmulo', 'Estrato', 'Cirro', 'Nimbo'] },
-      { title: 'Contienen "LUNA"', color: 'purple', items: ['Lunar', 'Lunático', 'Alunizar', 'Plenilunio'] },
+      { title: 'Contienen "LUNA"', color: 'purple', items: ['Lunar', 'Lunático', 'Lunación', 'Sublunar'] },
     ],
   },
   {
@@ -135,7 +135,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
       { title: 'Herramientas de jardín', color: 'yellow', items: ['Pala', 'Rastrillo', 'Regadera', 'Tijeras'] },
       { title: 'Verduras de raíz', color: 'green', items: ['Papa', 'Zanahoria', 'Remolacha', 'Rábano'] },
       { title: 'Cereales', color: 'blue', items: ['Trigo', 'Avena', 'Maíz', 'Cebada'] },
-      { title: 'Sinónimos de "cultivar"', color: 'purple', items: ['Sembrar', 'Labrar', 'Cosechar', 'Plantar'] },
+      { title: 'Sinónimos de "cultivar"', color: 'purple', items: ['Sembrar', 'Labrar', 'Arar', 'Plantar'] },
     ],
   },
   {
@@ -212,7 +212,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
   },
   {
     categories: [
-      { title: 'Vehículos de dos ruedas', color: 'yellow', items: ['Bicicleta', 'Motocicleta', 'Triciclo', 'Monociclo'] },
+      { title: 'Vehículos de dos ruedas', color: 'yellow', items: ['Bicicleta', 'Motocicleta', 'Ciclomotor', 'Motoneta'] },
       { title: 'Partes de una bicicleta', color: 'green', items: ['Manubrio', 'Pedal', 'Cadena', 'Cuadro'] },
       { title: 'Herramientas de mecánico', color: 'blue', items: ['Llave inglesa', 'Gato', 'Destornillador', 'Alicate'] },
       { title: 'Sinónimos de "veloz"', color: 'purple', items: ['Raudo', 'Rápido', 'Presuroso', 'Ligero'] },
@@ -223,7 +223,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
       { title: 'Prendas de invierno', color: 'yellow', items: ['Bufanda', 'Gorro', 'Guantes', 'Campera'] },
       { title: 'Prendas de verano', color: 'green', items: ['Short', 'Malla', 'Sombrero', 'Sandalias'] },
       { title: 'Tipos de clima', color: 'blue', items: ['Tropical', 'Templado', 'Árido', 'Polar'] },
-      { title: 'Contienen "NIEVE"', color: 'purple', items: ['Nevisca', 'Nevado', 'Aguanieve', 'Nevera'] },
+      { title: 'Contienen "NIEVE"', color: 'purple', items: ['Aguanieve', 'Nieve', 'Quitanieves', 'Blancanieves'] },
     ],
   },
   {
@@ -245,7 +245,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
   {
     categories: [
       { title: 'Herramientas del pintor', color: 'yellow', items: ['Pincel', 'Paleta', 'Caballete', 'Lienzo'] },
-      { title: 'Colores secundarios', color: 'green', items: ['Naranja', 'Violeta', 'Verde', 'Marrón'] },
+      { title: 'Técnicas de pintura', color: 'green', items: ['Óleo', 'Acrílico', 'Témpera', 'Gouache'] },
       { title: 'Estilos artísticos', color: 'blue', items: ['Cubismo', 'Surrealismo', 'Impresionismo', 'Barroco'] },
       { title: 'Sinónimos de "obra de arte"', color: 'purple', items: ['Pieza', 'Creación', 'Composición', 'Cuadro'] },
     ],
@@ -270,7 +270,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
     categories: [
       { title: 'Compositores clásicos', color: 'yellow', items: ['Mozart', 'Beethoven', 'Bach', 'Chopin'] },
       { title: 'Formas musicales', color: 'green', items: ['Sinfonía', 'Sonata', 'Concierto', 'Ópera'] },
-      { title: 'Términos de dinámica musical', color: 'blue', items: ['Forte', 'Piano', 'Crescendo', 'Andante'] },
+      { title: 'Términos de dinámica musical', color: 'blue', items: ['Forte', 'Piano', 'Crescendo', 'Diminuendo'] },
       { title: 'Sinónimos de "melodía"', color: 'purple', items: ['Tonada', 'Canción', 'Aire', 'Cadencia'] },
     ],
   },
@@ -391,7 +391,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
       { title: 'Aparatos eléctricos', color: 'yellow', items: ['Lámpara', 'Ventilador', 'Enchufe', 'Interruptor'] },
       { title: 'Herramientas de electricista', color: 'green', items: ['Alicate', 'Destornillador', 'Multímetro', 'Cinta aisladora'] },
       { title: 'Fuentes de energía', color: 'blue', items: ['Solar', 'Eólica', 'Hidráulica', 'Nuclear'] },
-      { title: 'Contienen "LUZ"', color: 'purple', items: ['Luciérnaga', 'Deslucir', 'Traslúcido', 'Reluciente'] },
+      { title: 'Contienen "LUZ"', color: 'purple', items: ['Luz', 'Contraluz', 'Luzco', 'Reluzco'] },
     ],
   },
   {
@@ -404,7 +404,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
   },
   {
     categories: [
-      { title: 'Partes de una flor', color: 'yellow', items: ['Pétalo', 'Tallo', 'Raíz', 'Polen'] },
+      { title: 'Partes de una flor', color: 'yellow', items: ['Pétalo', 'Tallo', 'Estambre', 'Polen'] },
       { title: 'Tipos de jardines', color: 'green', items: ['Botánico', 'Zen', 'Vertical', 'Colgante'] },
       { title: 'Herramientas de vivero', color: 'blue', items: ['Maceta', 'Regadera', 'Sustrato', 'Abono'] },
       { title: 'Sinónimos de "florecer"', color: 'purple', items: ['Brotar', 'Germinar', 'Retoñar', 'Reverdecer'] },
@@ -453,7 +453,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
   {
     categories: [
       { title: 'Términos de fotografía', color: 'yellow', items: ['Enfoque', 'Exposición', 'Obturador', 'Diafragma'] },
-      { title: 'Partes de una cámara', color: 'green', items: ['Lente', 'Trípode', 'Flash', 'Visor'] },
+      { title: 'Partes de una cámara', color: 'green', items: ['Lente', 'Disparador', 'Flash', 'Visor'] },
       { title: 'Tipos de fotografía', color: 'blue', items: ['Retrato', 'Paisaje', 'Macro', 'Panorámica'] },
       { title: 'Sinónimos de "capturar"', color: 'purple', items: ['Retratar', 'Fotografiar', 'Inmortalizar', 'Registrar'] },
     ],
@@ -471,7 +471,7 @@ export const CONNECTIONS_PUZZLES: { categories: ConnectionsCategory[] }[] = [
       { title: 'Partes de un barco', color: 'yellow', items: ['Proa', 'Popa', 'Timón', 'Casco'] },
       { title: 'Términos náuticos', color: 'green', items: ['Estribor', 'Babor', 'Cubierta', 'Ancla'] },
       { title: 'Tipos de embarcaciones', color: 'blue', items: ['Velero', 'Catamarán', 'Canoa', 'Yate'] },
-      { title: 'Sinónimos de "navegar"', color: 'purple', items: ['Surcar', 'Bogar', 'Zarpar', 'Flotar'] },
+      { title: 'Sinónimos de "navegar"', color: 'purple', items: ['Surcar', 'Bogar', 'Zarpar', 'Timonear'] },
     ],
   },
   {
